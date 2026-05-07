@@ -26,14 +26,14 @@ export default function App() {
 
   async function handleSimulate(event: DlpEventInput) {
     setError(null);
+    const requestToken = latestDetailRequest.current + 1;
+    latestDetailRequest.current = requestToken;
     try {
       const result = await simulate(event);
-      const requestId = result.event_id;
-      latestDetailRequest.current = requestId;
       setLastDecision(result.decision);
       await refreshEvents();
       const detail = await getEventDetail(result.event_id);
-      if (latestDetailRequest.current === requestId) {
+      if (latestDetailRequest.current === requestToken) {
         setSelected(detail);
       }
     } catch {
@@ -43,10 +43,11 @@ export default function App() {
 
   async function handleSelect(id: number) {
     setError(null);
-    latestDetailRequest.current = id;
+    const requestToken = latestDetailRequest.current + 1;
+    latestDetailRequest.current = requestToken;
     try {
       const detail = await getEventDetail(id);
-      if (latestDetailRequest.current === id) {
+      if (latestDetailRequest.current === requestToken) {
         setSelected(detail);
       }
     } catch {
