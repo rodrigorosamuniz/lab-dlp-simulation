@@ -1,3 +1,7 @@
+import sqlite3
+
+import pytest
+
 from app.dlp.engine import evaluate_event
 from app.dlp.samples import SAMPLE_EVENTS
 from app.storage.database import create_schema, open_database
@@ -49,3 +53,33 @@ def test_list_events_orders_newest_first(tmp_path):
     events = list_events(connection)
 
     assert [event["id"] for event in events] == [second_id, first_id]
+
+
+def test_foreign_keys_reject_orphan_evidence(tmp_path):
+    db_path = tmp_path / "events.db"
+    connection = open_database(db_path)
+    create_schema(connection)
+
+    with pytest.raises(sqlite3.IntegrityError):
+        connection.execute(
+            """
+            INSERT INTO evidence (event_id, type, label, masked_value, count, weight)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (999, "cpf", "CPF", "123.***.***-09", 1, 35),
+        )
+
+
+def test_save_event_rolls_back_when_child_insert_fails(tmp_path):
+    db_path = tmp_path / "events.db"
+    connection = open_database(db_path)
+    create_schema(connection)
+    event = SAMPLE_EVENTS[3]
+    decision = evaluate_event(event)
+    broken_evidence = decision.evidence[0].model_copy(update={"weight": None})
+    broken_decision = decision.model_copy(update={"evidence": [broken_evidence]})
+
+    with pytest.raises(sqlite3.IntegrityError):
+        save_event(connection, event, broken_decision)
+
+    assert list_events(connection) == []
