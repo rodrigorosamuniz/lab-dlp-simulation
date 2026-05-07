@@ -2,8 +2,10 @@ from fastapi.testclient import TestClient
 import pytest
 
 from app.api import database_connection
+from app.dlp.samples import SAMPLE_EVENTS
 from app.main import app
 from app.storage.database import create_schema, open_database
+from app.storage.repository import seed_samples
 
 
 @pytest.fixture
@@ -13,6 +15,7 @@ def client(tmp_path):
     def override_database_connection():
         connection = open_database(db_path)
         create_schema(connection)
+        seed_samples(connection, SAMPLE_EVENTS)
         try:
             yield connection
         finally:
