@@ -5,53 +5,57 @@ from app.dlp.models import DlpDecision, DlpEventInput
 
 
 def save_event(connection: sqlite3.Connection, event: DlpEventInput, decision: DlpDecision) -> int:
-    cursor = connection.execute(
-        """
-        INSERT INTO events (
-            channel, user, department, destination, destination_category,
-            declared_classification, detected_classification, effective_classification,
-            subject, content, action, severity, score, rationale
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            event.channel.value,
-            event.user,
-            event.department,
-            event.destination,
-            event.destination_category.value,
-            event.declared_classification.value,
-            decision.detected_classification.value,
-            decision.effective_classification.value,
-            event.subject,
-            event.content,
-            decision.action.value,
-            decision.severity.value,
-            decision.score,
-            json.dumps(decision.rationale, ensure_ascii=True),
-        ),
-    )
-    event_id = int(cursor.lastrowid)
-    connection.executemany(
-        """
-        INSERT INTO evidence (event_id, type, label, masked_value, count, weight)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """,
-        [
-            (event_id, item.type.value, item.label, item.masked_value, item.count, item.weight)
-            for item in decision.evidence
-        ],
-    )
-    connection.executemany(
-        """
-        INSERT INTO policies (event_id, name, action, severity, reason, score_delta)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """,
-        [
-            (event_id, item.name, item.action.value, item.severity.value, item.reason, item.score_delta)
-            for item in decision.policies
-        ],
-    )
-    connection.commit()
+    try:
+        with connection:
+            cursor = connection.execute(
+                """
+                INSERT INTO events (
+                    channel, user, department, destination, destination_category,
+                    declared_classification, detected_classification, effective_classification,
+                    subject, content, action, severity, score, rationale
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    event.channel.value,
+                    event.user,
+                    event.department,
+                    event.destination,
+                    event.destination_category.value,
+                    event.declared_classification.value,
+                    decision.detected_classification.value,
+                    decision.effective_classification.value,
+                    event.subject,
+                    event.content,
+                    decision.action.value,
+                    decision.severity.value,
+                    decision.score,
+                    json.dumps(decision.rationale, ensure_ascii=True),
+                ),
+            )
+            event_id = int(cursor.lastrowid)
+            connection.executemany(
+                """
+                INSERT INTO evidence (event_id, type, label, masked_value, count, weight)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (event_id, item.type.value, item.label, item.masked_value, item.count, item.weight)
+                    for item in decision.evidence
+                ],
+            )
+            connection.executemany(
+                """
+                INSERT INTO policies (event_id, name, action, severity, reason, score_delta)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (event_id, item.name, item.action.value, item.severity.value, item.reason, item.score_delta)
+                    for item in decision.policies
+                ],
+            )
+    except Exception:
+        connection.rollback()
+        raise
     return event_id
 
 

@@ -5,6 +5,7 @@ import sqlite3
 def open_database(path: str | Path = "dlp_simulation.db") -> sqlite3.Connection:
     connection = sqlite3.connect(path)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys = ON")
     return connection
 
 
