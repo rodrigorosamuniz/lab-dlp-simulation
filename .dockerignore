@@ -1,0 +1,7 @@
+.git
+backend/.pytest_cache
+backend/__pycache__
+backend/**/*.pyc
+frontend/node_modules
+frontend/dist
+dlp_simulation.db
