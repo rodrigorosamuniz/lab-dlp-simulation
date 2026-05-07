@@ -1,6 +1,28 @@
 from fastapi.testclient import TestClient
+import pytest
 
+from app.api import database_connection
 from app.main import app
+from app.storage.database import create_schema, open_database
+
+
+@pytest.fixture
+def client(tmp_path):
+    db_path = tmp_path / "api-test.db"
+
+    def override_database_connection():
+        connection = open_database(db_path)
+        create_schema(connection)
+        try:
+            yield connection
+        finally:
+            connection.close()
+
+    app.dependency_overrides[database_connection] = override_database_connection
+    try:
+        yield TestClient(app)
+    finally:
+        app.dependency_overrides.clear()
 
 
 def test_health_endpoint_returns_ok():
@@ -21,8 +43,7 @@ def test_samples_endpoint_returns_seeded_samples():
     assert len(response.json()) >= 6
 
 
-def test_simulate_endpoint_returns_decision_and_persists_event():
-    client = TestClient(app)
+def test_simulate_endpoint_returns_decision_and_persists_event(client):
     sample = client.get("/api/samples").json()[0]
 
     response = client.post("/api/simulate", json=sample)
