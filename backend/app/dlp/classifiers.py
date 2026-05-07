@@ -40,7 +40,7 @@ def classify_content(content: str) -> ClassificationResult:
     evidence.extend(_find_all(SECRET_RE, content, EvidenceType.SECRET, "Credencial", 60, _mask_secret))
     evidence.extend(_find_all(SALARY_RE, content, EvidenceType.SALARY, "Salario", 25, _mask_term))
 
-    counts = Counter(item.type for item in evidence)
+    counts = Counter({item.type: item.count for item in evidence})
     detected_level = _level_from_evidence(counts)
 
     if declared_marker is not None:
