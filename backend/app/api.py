@@ -5,9 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.dlp.engine import evaluate_event
 from app.dlp.models import DlpEventInput
-from app.dlp.samples import SAMPLE_EVENTS
 from app.seed import app_database
-from app.storage.repository import get_event_detail, list_events, save_event
+from app.storage.repository import get_event_detail, list_events, list_samples, save_event
 
 router = APIRouter(prefix="/api")
 
@@ -26,8 +25,8 @@ def health() -> dict[str, str]:
 
 
 @router.get("/samples")
-def samples() -> list[dict]:
-    return [sample.model_dump(mode="json") for sample in SAMPLE_EVENTS]
+def samples(connection: sqlite3.Connection = Depends(database_connection)) -> list[dict]:
+    return list_samples(connection)
 
 
 @router.post("/simulate")

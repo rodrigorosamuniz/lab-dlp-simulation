@@ -5,7 +5,7 @@ import pytest
 from app.dlp.engine import evaluate_event
 from app.dlp.samples import SAMPLE_EVENTS
 from app.storage.database import create_schema, open_database
-from app.storage.repository import get_event_detail, list_events, save_event
+from app.storage.repository import get_event_detail, list_events, list_samples, save_event, seed_samples
 
 
 def test_save_and_list_event_roundtrip(tmp_path):
@@ -29,7 +29,7 @@ def test_event_detail_includes_evidence_policies_and_rationale(tmp_path):
     db_path = tmp_path / "events.db"
     connection = open_database(db_path)
     create_schema(connection)
-    event = SAMPLE_EVENTS[3]
+    event = SAMPLE_EVENTS[4]
     decision = evaluate_event(event)
 
     event_id = save_event(connection, event, decision)
@@ -40,6 +40,20 @@ def test_event_detail_includes_evidence_policies_and_rationale(tmp_path):
     assert detail["rationale"] == decision.rationale
     assert detail["evidence"]
     assert detail["policies"]
+    assert detail["alerts"]
+
+
+def test_seed_and_list_samples_roundtrip(tmp_path):
+    db_path = tmp_path / "events.db"
+    connection = open_database(db_path)
+    create_schema(connection)
+
+    seed_samples(connection, SAMPLE_EVENTS)
+    seed_samples(connection, SAMPLE_EVENTS)
+    samples = list_samples(connection)
+
+    assert len(samples) == len(SAMPLE_EVENTS)
+    assert {sample["channel"] for sample in samples} == {"email", "upload", "chat"}
 
 
 def test_list_events_orders_newest_first(tmp_path):

@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class Channel(StrEnum):
@@ -71,6 +71,14 @@ class DlpEventInput(BaseModel):
     declared_classification: ClassificationLevel
     subject: str
     content: str
+
+    @field_validator("user", "department", "destination", "subject", "content")
+    @classmethod
+    def require_non_blank_text(cls, value: str) -> str:
+        stripped = value.strip()
+        if not stripped:
+            raise ValueError("field must not be blank")
+        return stripped
 
 
 class PolicyMatch(BaseModel):

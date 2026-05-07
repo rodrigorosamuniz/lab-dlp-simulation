@@ -34,13 +34,13 @@ def test_health_endpoint_returns_ok():
     assert response.json() == {"status": "ok", "service": "lab-dlp-simulation"}
 
 
-def test_samples_endpoint_returns_seeded_samples():
-    client = TestClient(app)
-
+def test_samples_endpoint_returns_seeded_samples(client):
     response = client.get("/api/samples")
 
     assert response.status_code == 200
-    assert len(response.json()) >= 6
+    samples = response.json()
+    assert len(samples) >= 9
+    assert {sample["channel"] for sample in samples} == {"email", "upload", "chat"}
 
 
 def test_simulate_endpoint_returns_decision_and_persists_event(client):
@@ -57,3 +57,22 @@ def test_simulate_endpoint_returns_decision_and_persists_event(client):
 
     assert events.status_code == 200
     assert body["event_id"] in [event["id"] for event in events.json()]
+
+
+def test_simulate_rejects_blank_required_fields(client):
+    response = client.post(
+        "/api/simulate",
+        json={
+            "channel": "email",
+            "user": " ",
+            "department": "RH",
+            "destination": "",
+            "destination_category": "pessoal",
+            "declared_classification": "publico",
+            "subject": " ",
+            "content": "",
+        },
+    )
+
+    assert response.status_code == 422
+    assert client.get("/api/events").json() == []

@@ -50,6 +50,27 @@ def create_schema(connection: sqlite3.Connection) -> None:
             score_delta INTEGER NOT NULL,
             FOREIGN KEY(event_id) REFERENCES events(id)
         );
+        CREATE TABLE IF NOT EXISTS alerts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_id INTEGER NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            severity TEXT NOT NULL,
+            action TEXT NOT NULL,
+            message TEXT NOT NULL,
+            FOREIGN KEY(event_id) REFERENCES events(id)
+        );
+        CREATE TABLE IF NOT EXISTS samples (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            channel TEXT NOT NULL,
+            user TEXT NOT NULL,
+            department TEXT NOT NULL,
+            destination TEXT NOT NULL,
+            destination_category TEXT NOT NULL,
+            declared_classification TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            content TEXT NOT NULL,
+            UNIQUE(channel, subject)
+        );
         """
     )
     connection.commit()

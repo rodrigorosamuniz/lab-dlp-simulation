@@ -53,6 +53,19 @@ def save_event(connection: sqlite3.Connection, event: DlpEventInput, decision: D
                     for item in decision.policies
                 ],
             )
+            if decision.action.value != "allow":
+                connection.execute(
+                    """
+                    INSERT INTO alerts (event_id, severity, action, message)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (
+                        event_id,
+                        decision.severity.value,
+                        decision.action.value,
+                        "; ".join(policy.name for policy in decision.policies),
+                    ),
+                )
     except Exception:
         connection.rollback()
         raise
@@ -61,6 +74,43 @@ def save_event(connection: sqlite3.Connection, event: DlpEventInput, decision: D
 
 def list_events(connection: sqlite3.Connection) -> list[dict]:
     rows = connection.execute("SELECT * FROM events ORDER BY id DESC").fetchall()
+    return [dict(row) for row in rows]
+
+
+def seed_samples(connection: sqlite3.Connection, samples: list[DlpEventInput]) -> None:
+    with connection:
+        connection.executemany(
+            """
+            INSERT OR IGNORE INTO samples (
+                channel, user, department, destination, destination_category,
+                declared_classification, subject, content
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            [
+                (
+                    sample.channel.value,
+                    sample.user,
+                    sample.department,
+                    sample.destination,
+                    sample.destination_category.value,
+                    sample.declared_classification.value,
+                    sample.subject,
+                    sample.content,
+                )
+                for sample in samples
+            ],
+        )
+
+
+def list_samples(connection: sqlite3.Connection) -> list[dict]:
+    rows = connection.execute(
+        """
+        SELECT channel, user, department, destination, destination_category,
+               declared_classification, subject, content
+        FROM samples
+        ORDER BY id
+        """
+    ).fetchall()
     return [dict(row) for row in rows]
 
 
@@ -77,9 +127,14 @@ def get_event_detail(connection: sqlite3.Connection, event_id: int) -> dict | No
         "SELECT name, action, severity, reason, score_delta FROM policies WHERE event_id = ?",
         (event_id,),
     ).fetchall()
+    alerts = connection.execute(
+        "SELECT severity, action, message, created_at FROM alerts WHERE event_id = ?",
+        (event_id,),
+    ).fetchall()
 
     result = dict(event)
     result["rationale"] = json.loads(result["rationale"])
     result["evidence"] = [dict(row) for row in evidence]
     result["policies"] = [dict(row) for row in policies]
+    result["alerts"] = [dict(row) for row in alerts]
     return result
