@@ -285,12 +285,19 @@ th {
   text-transform: uppercase;
 }
 
-tbody tr {
-  cursor: pointer;
-}
-
 tbody tr:hover {
   background: #f0f4f8;
+}
+
+.event-link {
+  background: transparent;
+  border: 0;
+  color: #0f609b;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 36px;
+  padding: 0;
+  text-decoration: underline;
 }
 
 .detail-grid {

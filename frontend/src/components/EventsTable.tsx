@@ -27,8 +27,12 @@ export default function EventsTable({ events, onSelect }: Props) {
           </thead>
           <tbody>
             {events.map((event) => (
-              <tr key={event.id} onClick={() => onSelect(event.id)}>
-                <td>{event.id}</td>
+              <tr key={event.id}>
+                <td>
+                  <button className="event-link" onClick={() => onSelect(event.id)} type="button">
+                    {event.id}
+                  </button>
+                </td>
                 <td>{event.channel}</td>
                 <td>{event.user}</td>
                 <td>{event.destination}</td>

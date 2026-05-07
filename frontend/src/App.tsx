@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getEventDetail, getEvents, getSamples, simulate } from "./api";
 import Dashboard from "./components/Dashboard";
 import EventDetail from "./components/EventDetail";
@@ -13,6 +13,7 @@ export default function App() {
   const [selected, setSelected] = useState<EventDetailType | null>(null);
   const [lastDecision, setLastDecision] = useState<DlpDecision | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const latestDetailRequest = useRef(0);
 
   async function refreshEvents() {
     setEvents(await getEvents());
@@ -27,9 +28,14 @@ export default function App() {
     setError(null);
     try {
       const result = await simulate(event);
+      const requestId = result.event_id;
+      latestDetailRequest.current = requestId;
       setLastDecision(result.decision);
       await refreshEvents();
-      setSelected(await getEventDetail(result.event_id));
+      const detail = await getEventDetail(result.event_id);
+      if (latestDetailRequest.current === requestId) {
+        setSelected(detail);
+      }
     } catch {
       setError("Nao foi possivel executar a simulacao.");
     }
@@ -37,8 +43,12 @@ export default function App() {
 
   async function handleSelect(id: number) {
     setError(null);
+    latestDetailRequest.current = id;
     try {
-      setSelected(await getEventDetail(id));
+      const detail = await getEventDetail(id);
+      if (latestDetailRequest.current === id) {
+        setSelected(detail);
+      }
     } catch {
       setError("Nao foi possivel carregar o detalhe do evento.");
     }

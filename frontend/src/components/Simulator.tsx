@@ -50,7 +50,7 @@ export default function Simulator({ samples, lastDecision, onSimulate }: Props) 
     <section className="panel simulator">
       <div className="panel-heading">
         <h2>Simulador</h2>
-        <div className="tabs" role="tablist" aria-label="Canal">
+        <div className="tabs" aria-label="Canal">
           {channels.map((item) => (
             <button className={channel === item ? "active" : ""} key={item} onClick={() => setChannel(item)} type="button">
               {item.toUpperCase()}
