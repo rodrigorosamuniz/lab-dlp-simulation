@@ -63,10 +63,10 @@ def classify_content(content: str) -> ClassificationResult:
 
 def _find_declared_marker(content: str) -> ClassificationLevel | None:
     upper_content = content.upper()
-    for marker, level in LABELS.items():
-        if marker in upper_content:
-            return level
-    return None
+    found_levels = [level for marker, level in LABELS.items() if marker in upper_content]
+    if not found_levels:
+        return None
+    return max(found_levels, key=LEVEL_ORDER.index)
 
 
 def _find_all(
