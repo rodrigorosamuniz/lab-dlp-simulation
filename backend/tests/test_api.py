@@ -62,6 +62,20 @@ def test_simulate_endpoint_returns_decision_and_persists_event(client):
     assert body["event_id"] in [event["id"] for event in events.json()]
 
 
+def test_reset_events_endpoint_clears_events_and_keeps_samples(client):
+    sample = client.get("/api/samples").json()[0]
+    simulated = client.post("/api/simulate", json=sample)
+    assert simulated.status_code == 200
+    assert client.get("/api/events").json()
+
+    response = client.post("/api/events/reset")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "deleted_events": 1}
+    assert client.get("/api/events").json() == []
+    assert len(client.get("/api/samples").json()) == len(SAMPLE_EVENTS)
+
+
 def test_simulate_rejects_blank_required_fields(client):
     response = client.post(
         "/api/simulate",

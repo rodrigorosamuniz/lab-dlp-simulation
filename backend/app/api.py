@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.dlp.engine import evaluate_event
 from app.dlp.models import DlpEventInput
 from app.seed import app_database
-from app.storage.repository import get_event_detail, list_events, list_samples, save_event
+from app.storage.repository import get_event_detail, list_events, list_samples, reset_events, save_event
 
 router = APIRouter(prefix="/api")
 
@@ -39,6 +39,12 @@ def simulate(event: DlpEventInput, connection: sqlite3.Connection = Depends(data
 @router.get("/events")
 def events(connection: sqlite3.Connection = Depends(database_connection)) -> list[dict]:
     return list_events(connection)
+
+
+@router.post("/events/reset")
+def reset_event_history(connection: sqlite3.Connection = Depends(database_connection)) -> dict[str, int | str]:
+    deleted_events = reset_events(connection)
+    return {"status": "ok", "deleted_events": deleted_events}
 
 
 @router.get("/events/{event_id}")

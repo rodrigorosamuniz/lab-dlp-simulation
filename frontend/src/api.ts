@@ -24,6 +24,11 @@ export async function getEventDetail(id: number): Promise<EventDetail> {
   return requireOk(response);
 }
 
+export async function resetEvents(): Promise<{ status: string; deleted_events: number }> {
+  const response = await fetch("/api/events/reset", { method: "POST" });
+  return requireOk(response);
+}
+
 async function requireOk<T>(response: Response): Promise<T> {
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);

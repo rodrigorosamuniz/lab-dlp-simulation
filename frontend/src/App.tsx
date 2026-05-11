@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getEventDetail, getEvents, getSamples, simulate } from "./api";
+import { getEventDetail, getEvents, getSamples, resetEvents, simulate } from "./api";
 import Dashboard from "./components/Dashboard";
 import EventDetail from "./components/EventDetail";
 import EventsTable from "./components/EventsTable";
@@ -55,6 +55,19 @@ export default function App() {
     }
   }
 
+  async function handleResetEvents() {
+    setError(null);
+    latestDetailRequest.current += 1;
+    try {
+      await resetEvents();
+      setEvents([]);
+      setSelected(null);
+      setLastDecision(null);
+    } catch {
+      setError("Nao foi possivel resetar os eventos.");
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -64,7 +77,7 @@ export default function App() {
         </div>
       </header>
       {error && <div className="alert">{error}</div>}
-      <Dashboard events={events} />
+      <Dashboard events={events} onReset={handleResetEvents} />
       <section className="workspace">
         <Simulator samples={samples} onSimulate={handleSimulate} lastDecision={lastDecision} />
         <PolicySummary />

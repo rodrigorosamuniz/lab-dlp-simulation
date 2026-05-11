@@ -8,6 +8,7 @@ Assumindo que o Docker Desktop ja esta rodando:
 
 ```bash
 cd /Users/rodrigomuniz/Codex/lab-dlp-simulation
+docker build -t lab-dlp-simulation .
 docker run --rm -p 8000:8000 lab-dlp-simulation
 ```
 
@@ -16,6 +17,11 @@ Depois acesse:
 ```text
 http://localhost:8000
 ```
+
+Para parar o laboratorio:
+
+- se o container estiver rodando no terminal atual, pressione `Ctrl+C`;
+- se estiver em background, rode `docker ps` e depois `docker stop <container_id_ou_nome>`.
 
 ## Visao Geral
 
@@ -38,6 +44,8 @@ Mostra um resumo dos eventos ja simulados:
 - quarentenas;
 - alertas criticos;
 - score medio.
+
+Tambem possui o botao `Resetar eventos`, usado para limpar o historico de simulacoes sem remover as amostras do laboratorio.
 
 ### Simulador
 
@@ -84,6 +92,7 @@ Ao clicar no ID do evento, a interface mostra:
 - score de risco;
 - evidencias detectadas;
 - politicas acionadas;
+- alertas gerados;
 - justificativa da decisao;
 - payload inspecionado.
 

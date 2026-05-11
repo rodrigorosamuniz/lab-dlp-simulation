@@ -31,6 +31,7 @@ export default function EventDetail({ event }: Props) {
         <span>Destino: {event.destination}</span>
         <span>Destino categoria: {event.destination_category}</span>
         <span>Classificacao efetiva: {event.effective_classification}</span>
+        <span>Classificacao detectada: {event.detected_classification}</span>
         <span>Classificacao declarada: {event.declared_classification}</span>
         <span>Score: {event.score}</span>
       </div>
@@ -57,6 +58,21 @@ export default function EventDetail({ event }: Props) {
             </div>
             <p>{policy.reason}</p>
             <span className="muted">Delta {policy.score_delta} | {policy.severity}</span>
+          </li>
+        ))}
+      </ul>
+
+      <h3>Alertas</h3>
+      <ul className="stack-list">
+        {event.alerts.length === 0 && <li>Nenhum alerta gerado para este evento.</li>}
+        {event.alerts.map((alert) => (
+          <li key={`${alert.created_at}-${alert.message}`}>
+            <div className="list-heading">
+              <strong>{alert.message}</strong>
+              <span className={`badge action-${alert.action}`}>{alert.action}</span>
+              <span className={`badge severity-${alert.severity}`}>{alert.severity}</span>
+            </div>
+            <span className="muted">{alert.created_at}</span>
           </li>
         ))}
       </ul>

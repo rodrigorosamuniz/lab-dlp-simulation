@@ -31,6 +31,13 @@ export interface PolicyMatch {
   score_delta: number;
 }
 
+export interface Alert {
+  severity: Severity;
+  action: DlpAction;
+  message: string;
+  created_at: string;
+}
+
 export interface DlpDecision {
   action: DlpAction;
   severity: Severity;
@@ -66,4 +73,5 @@ export interface EventDetail extends Omit<EventSummary, "rationale"> {
   rationale: string[];
   evidence: Evidence[];
   policies: PolicyMatch[];
+  alerts: Alert[];
 }

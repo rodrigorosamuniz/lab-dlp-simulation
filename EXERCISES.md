@@ -9,6 +9,7 @@ Usar a interface do laboratorio para entender como um DLP classifica informacoes
 Suba o container:
 
 ```bash
+docker build -t lab-dlp-simulation .
 docker run --rm -p 8000:8000 lab-dlp-simulation
 ```
 
@@ -25,6 +26,8 @@ Observe inicialmente:
 - Politicas Fixas;
 - tabela de Eventos;
 - Detalhe do evento.
+
+Se estiver reaproveitando o laboratorio depois de outros testes, clique em `Resetar eventos` antes de iniciar os exercicios. Isso limpa o historico e mantem as amostras disponiveis.
 
 ## Exercicio 1: Conteudo Publico Permitido
 
@@ -196,9 +199,9 @@ Responda:
 
 Resultado esperado:
 
-- acao de alerta ou bloqueio, dependendo do score;
+- acao `block`;
 - evidencia de email e CPF;
-- demonstracao de rotulo inconsistente ou classificacao elevada pelo DLP.
+- demonstracao de rotulo inconsistente e classificacao elevada pelo DLP.
 
 ## Exercicio 9: CPF Em Volume Em Chat/IA
 
@@ -246,7 +249,7 @@ Resultado esperado:
 
 - politica de rotulo inconsistente;
 - classificacao efetiva maior que `Publico`;
-- alerta ou bloqueio conforme severidade.
+- alerta, quarentena ou bloqueio conforme destino, canal e severidade.
 
 ## Exercicio 11: Mudanca De Destino
 

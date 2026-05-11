@@ -77,6 +77,20 @@ def list_events(connection: sqlite3.Connection) -> list[dict]:
     return [dict(row) for row in rows]
 
 
+def reset_events(connection: sqlite3.Connection) -> int:
+    row = connection.execute("SELECT COUNT(*) AS total FROM events").fetchone()
+    deleted_events = int(row["total"])
+    with connection:
+        connection.execute("DELETE FROM alerts")
+        connection.execute("DELETE FROM evidence")
+        connection.execute("DELETE FROM policies")
+        connection.execute("DELETE FROM events")
+        connection.execute(
+            "DELETE FROM sqlite_sequence WHERE name IN ('alerts', 'evidence', 'policies', 'events')"
+        )
+    return deleted_events
+
+
 def seed_samples(connection: sqlite3.Connection, samples: list[DlpEventInput]) -> None:
     with connection:
         connection.executemany(

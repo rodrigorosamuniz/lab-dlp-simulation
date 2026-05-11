@@ -65,11 +65,16 @@ h3 {
   margin-top: 18px;
 }
 
+.dashboard-panel {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .metrics {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin-bottom: 16px;
 }
 
 .metric,
@@ -140,7 +145,8 @@ h3 {
 }
 
 .tabs button,
-.primary-action {
+.primary-action,
+.secondary-action {
   border: 1px solid #bcccdc;
   border-radius: 8px;
   cursor: pointer;
@@ -165,7 +171,14 @@ h3 {
   min-width: 184px;
 }
 
-.primary-action:disabled {
+.secondary-action {
+  background: #ffffff;
+  justify-self: end;
+  min-width: 152px;
+}
+
+.primary-action:disabled,
+.secondary-action:disabled {
   background: #9fb3c8;
   border-color: #9fb3c8;
   cursor: not-allowed;
@@ -361,6 +374,10 @@ pre {
   .form-grid,
   .detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .secondary-action {
+    justify-self: stretch;
   }
 
   .app-shell {

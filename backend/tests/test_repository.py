@@ -5,7 +5,7 @@ import pytest
 from app.dlp.engine import evaluate_event
 from app.dlp.samples import SAMPLE_EVENTS
 from app.storage.database import create_schema, open_database
-from app.storage.repository import get_event_detail, list_events, list_samples, save_event, seed_samples
+from app.storage.repository import get_event_detail, list_events, list_samples, reset_events, save_event, seed_samples
 
 
 def test_save_and_list_event_roundtrip(tmp_path):
@@ -69,6 +69,24 @@ def test_list_events_orders_newest_first(tmp_path):
     assert [event["id"] for event in events] == [second_id, first_id]
 
 
+def test_reset_events_removes_history_and_keeps_samples(tmp_path):
+    db_path = tmp_path / "events.db"
+    connection = open_database(db_path)
+    create_schema(connection)
+    seed_samples(connection, SAMPLE_EVENTS)
+    event_id = save_event(connection, SAMPLE_EVENTS[4], evaluate_event(SAMPLE_EVENTS[4]))
+
+    deleted_events = reset_events(connection)
+
+    assert deleted_events == 1
+    assert list_events(connection) == []
+    assert get_event_detail(connection, event_id) is None
+    assert len(list_samples(connection)) == len(SAMPLE_EVENTS)
+    assert connection.execute("SELECT COUNT(*) FROM alerts").fetchone()[0] == 0
+    assert connection.execute("SELECT COUNT(*) FROM evidence").fetchone()[0] == 0
+    assert connection.execute("SELECT COUNT(*) FROM policies").fetchone()[0] == 0
+
+
 def test_foreign_keys_reject_orphan_evidence(tmp_path):
     db_path = tmp_path / "events.db"
     connection = open_database(db_path)
@@ -88,7 +106,7 @@ def test_save_event_rolls_back_when_child_insert_fails(tmp_path):
     db_path = tmp_path / "events.db"
     connection = open_database(db_path)
     create_schema(connection)
-    event = SAMPLE_EVENTS[3]
+    event = SAMPLE_EVENTS[4]
     decision = evaluate_event(event)
     broken_evidence = decision.evidence[0].model_copy(update={"weight": None})
     broken_decision = decision.model_copy(update={"evidence": [broken_evidence]})
