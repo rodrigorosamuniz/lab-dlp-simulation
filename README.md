@@ -8,6 +8,8 @@ A simulacao avalia eventos de saida de dados, detecta evidencias sensiveis, calc
 
 - [Guia da UI](UI_GUIDE.md): overview rapido das telas e features.
 - [Exercicios](EXERCISES.md): roteiro individual para alunos praticarem cenarios de DLP.
+- [Guia do notebook](NOTEBOOK_GUIDE.md): como rodar e usar o notebook de codificacoes e hashes.
+- [Exercicios do notebook](NOTEBOOK_EXERCISES.md): roteiro individual para praticar codificacoes, hashes e interpretacao das saidas.
 
 ## Requisitos
 
@@ -142,10 +144,28 @@ npm install
 npm run build
 ```
 
+## Notebook De Codificacoes E Hashes
+
+O repositorio tambem contem um notebook didatico sobre codificacoes e hashes:
+
+```text
+notebooks/lab_codificacoes_hashes.ipynb
+```
+
+Para usar:
+
+1. Abra o arquivo no VS Code com a extensao Jupyter, Jupyter Notebook ou JupyterLab.
+2. Execute a celula de codigo.
+3. Digite textos ficticios para comparar codificacoes e hashes.
+4. Use [Guia do notebook](NOTEBOOK_GUIDE.md) e [Exercicios do notebook](NOTEBOOK_EXERCISES.md) como roteiro.
+
+Nao use dados reais, senhas reais, tokens ou informacoes pessoais no notebook.
+
 ## Estrutura
 
 ```text
 backend/   API FastAPI, motor de simulacao DLP, persistencia SQLite e testes
 frontend/  Interface React/Vite
+notebooks/ Notebook didatico de codificacoes e hashes
 Dockerfile Build unico com backend e frontend
 ```
