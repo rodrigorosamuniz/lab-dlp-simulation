@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import { getEventDetail, getEvents, getSamples, resetEvents, simulate } from "./api";
 import Dashboard from "./components/Dashboard";
 import EventDetail from "./components/EventDetail";
@@ -13,7 +14,17 @@ export default function App() {
   const [selected, setSelected] = useState<EventDetailType | null>(null);
   const [lastDecision, setLastDecision] = useState<DlpDecision | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
   const latestDetailRequest = useRef(0);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   async function refreshEvents() {
     setEvents(await getEvents());
@@ -68,13 +79,19 @@ export default function App() {
     }
   }
 
+  const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
+
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div>
+        <div className="topbar-brand">
           <p>Lab DLP Simulation</p>
           <h1>Operacao DLP</h1>
         </div>
+        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          <span>{theme === 'light' ? 'Escuro' : 'Claro'}</span>
+        </button>
       </header>
       {error && <div className="alert">{error}</div>}
       <Dashboard events={events} onReset={handleResetEvents} />
