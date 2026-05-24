@@ -1,13 +1,13 @@
 # Lab DLP Simulation
 
-Laboratorio local para demonstrar conceitos de DLP (Data Loss Prevention) de forma didatica. O projeto combina backend FastAPI, frontend React/Vite e SQLite em uma unica aplicacao servida pelo container Docker.
+Laboratório local para demonstrar conceitos de DLP (Data Loss Prevention) de forma didática. O projeto combina backend FastAPI, frontend React/Vite e SQLite em uma única aplicação servida pelo container Docker.
 
-A simulacao avalia eventos de saida de dados, detecta evidencias sensiveis, calcula classificacao detectada e efetiva, aplica politicas, gera alertas e registra o historico para auditoria.
+A simulação avalia eventos de saída de dados, detecta evidências sensíveis, calcula classificação detectada e efetiva, aplica políticas, gera alertas e registra o histórico para auditoria.
 
-## Material Do Laboratorio
+## Material Do Laboratório
 
 - [Guia da UI](UI_GUIDE.md): overview rapido das telas e features.
-- [Exercicios](EXERCISES.md): roteiro individual para alunos praticarem cenarios de DLP.
+- [Exercícios](EXERCISES.md): roteiro individual para alunos práticarem cenarios de DLP.
 
 ## Requisitos
 
@@ -21,9 +21,9 @@ Para desenvolvimento local:
 - Node.js 20 ou superior.
 - npm.
 
-> Observacao: use Python 3.12 no desenvolvimento local. Versoes mais novas, como Python 3.14, podem quebrar dependencias pinadas do backend, especialmente `pydantic-core`.
+> Observação: use Python 3.12 no desenvolvimento local. Versoes mais novas, como Python 3.14, podem quebrar dependencias pinadas do backend, especialmente `pydantic-core`.
 
-## Instalacao E Execucao Com Docker
+## Instalação E Execução Com Docker
 
 Na raiz do projeto:
 
@@ -31,7 +31,7 @@ Na raiz do projeto:
 docker build -t lab-dlp-simulation .
 ```
 
-Suba o laboratorio:
+Suba o laboratório:
 
 ```bash
 docker run --rm -p 8000:8000 lab-dlp-simulation
@@ -43,7 +43,7 @@ Acesse:
 http://localhost:8000
 ```
 
-Para parar o laboratorio quando o container estiver rodando no terminal atual, pressione `Ctrl+C`.
+Para parar o laboratório quando o container estiver rodando no terminal atual, pressione `Ctrl+C`.
 
 Se o container estiver em background, liste os containers:
 
@@ -63,12 +63,12 @@ O container serve a API e a UI no mesmo processo. O banco SQLite fica dentro do 
 
 1. Abra `http://localhost:8000`.
 2. Escolha uma amostra no Simulador.
-3. Execute a simulacao.
+3. Execute a simulação.
 4. Clique no ID do evento na tabela.
-5. Analise classificacoes, evidencias, politicas, alertas, score e acao final.
-6. Use `Resetar eventos` para limpar o historico antes de uma nova turma ou novo roteiro.
+5. Análise classificações, evidências, políticas, alertas, score e ação final.
+6. Use `Resetar eventos` para limpar o histórico antes de uma nova turma ou novo roteiro.
 
-## Modelo Da Simulacao
+## Modelo Da Simulação
 
 Canais simulados:
 
@@ -76,7 +76,7 @@ Canais simulados:
 - `upload`
 - `chat`
 
-Classificacoes:
+Classificações:
 
 - `publico`
 - `interno`
@@ -90,7 +90,7 @@ Categorias de destino:
 - `pessoal`
 - `servico_publico`
 
-Acoes possiveis:
+Ações possiveis:
 
 - `allow`
 - `warn`
@@ -117,7 +117,7 @@ npm install
 npm run dev
 ```
 
-Em desenvolvimento, a UI do Vite roda separada do backend. Para testar a aplicacao empacotada como os alunos vao usar, prefira o Docker.
+Em desenvolvimento, a UI do Vite roda separada do backend. Para testar a aplicação empacotada como os alunos vao usar, prefira o Docker.
 
 ## Testes
 

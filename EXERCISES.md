@@ -1,10 +1,10 @@
-# Exercicios Do Lab DLP Simulation
+# Exercícios Do Lab DLP Simulation
 
 ## Objetivo
 
-Usar a interface do laboratorio para entender como um DLP classifica informacoes, detecta evidencias sensiveis, aplica politicas, calcula risco e decide entre permitir, alertar, quarentenar ou bloquear uma saida de dados.
+Usar a interface do laboratório para entender como um DLP classifica informações, detecta evidências sensíveis, aplica políticas, calcula risco e decide entre permitir, alertar, quarentenar ou bloquear uma saída de dados.
 
-## Preparacao
+## Preparação
 
 Suba o container:
 
@@ -23,235 +23,235 @@ Observe inicialmente:
 
 - Dashboard;
 - Simulador;
-- Politicas Fixas;
+- Políticas Fixas;
 - tabela de Eventos;
 - Detalhe do evento.
 
-Se estiver reaproveitando o laboratorio depois de outros testes, clique em `Resetar eventos` antes de iniciar os exercicios. Isso limpa o historico e mantem as amostras disponiveis.
+Se estiver reaproveitando o laboratório depois de outros testes, clique em `Resetar eventos` antes de iniciar os exercícios. Isso limpa o histórico e mantem as amostras disponíveis.
 
-## Exercicio 1: Conteudo Publico Permitido
+## Exercício 1: Conteúdo Público Permitido
 
 No Simulador, use:
 
 - canal: `EMAIL`
 - amostra: `Release publico`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. Qual foi a acao final?
+1. Qual foi a ação final?
 2. Qual foi a severidade?
-3. O DLP encontrou alguma evidencia sensivel?
+3. O DLP encontrou alguma evidência sensível?
 4. Por que faz sentido permitir esse envio?
 
 Resultado esperado:
 
-- acao proxima de `allow`;
+- ação próxima de `allow`;
 - severidade baixa;
-- nenhuma evidencia sensivel relevante.
+- nenhuma evidência sensível relevante.
 
-## Exercicio 2: Informacao Confidencial Para Email Pessoal
+## Exercício 2: Informação Confidencial Para Email Pessoal
 
 No Simulador, use:
 
 - canal: `EMAIL`
 - amostra: `Planilha de salarios`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. Qual politica foi acionada?
-2. A classificacao declarada e a detectada sao iguais?
-3. Por que salario e tratado como informacao sensivel?
-4. Qual seria um destino mais adequado para esse conteudo?
+1. Qual política foi acionada?
+2. A classificação declarada e a detectada sao iguais?
+3. Por que salário e tratado como informação sensível?
+4. Qual seria um destino mais adequado para esse conteúdo?
 
 Resultado esperado:
 
-- acao `block`;
+- ação `block`;
 - severidade alta;
-- politica relacionada a conteudo confidencial enviado para destino pessoal.
+- política relacionada a conteúdo confidencial enviado para destino pessoal.
 
-## Exercicio 3: Contrato Para Fornecedor Aprovado
+## Exercício 3: Contrato Para Fornecedor Aprovado
 
 No Simulador, use:
 
 - canal: `EMAIL`
 - amostra: `Contrato fornecedor`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
 1. O envio foi permitido, bloqueado ou colocado em quarentena?
-2. Por que o destino aprovado muda a decisao?
+2. Por que o destino aprovado muda a decisão?
 3. Qual e a diferenca entre bloquear e quarentenar?
 4. Em um DLP real, quem poderia revisar uma quarentena?
 
 Resultado esperado:
 
-- acao `quarantine` ou alerta controlado;
+- ação `quarantine` ou alerta controlado;
 - severidade intermediaria;
-- demonstracao de que contexto importa, nao apenas conteudo.
+- demonstração de que contexto importa, nao apenas conteúdo.
 
-## Exercicio 4: Upload Publico
+## Exercício 4: Upload Público
 
 No Simulador, use:
 
 - canal: `UPLOAD`
 - amostra: `campanha-publica.txt`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
 1. O canal `UPLOAD` por si so torna o evento suspeito?
-2. O conteudo foi classificado como publico, interno, confidencial ou restrito?
+2. O conteúdo foi classificado como público, interno, confidencial ou restrito?
 3. Por que um DLP nao deve bloquear todo upload externo?
 
 Resultado esperado:
 
-- acao `allow`;
+- ação `allow`;
 - baixo risco;
-- demonstracao de reducao de falso positivo.
+- demonstração de reducao de falso positivo.
 
-## Exercicio 5: Base De Clientes Para Drive Pessoal
+## Exercício 5: Base De Clientes Para Drive Pessoal
 
 No Simulador, use:
 
 - canal: `UPLOAD`
 - amostra: `base-clientes.csv`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. Quais evidencias foram detectadas?
-2. A presenca de varios CPFs mudou a classificacao?
-3. Qual foi a classificacao efetiva?
+1. Quais evidências foram detectadas?
+2. A presença de vários CPFs mudou a classificação?
+3. Qual foi a classificação efetiva?
 4. Por que o destino `Drive pessoal` aumenta o risco?
 
 Resultado esperado:
 
-- acao `block`;
-- classificacao efetiva `restrito`;
-- evidencia de CPF em volume.
+- ação `block`;
+- classificação efetiva `restrito`;
+- evidência de CPF em volume.
 
-## Exercicio 6: Vazamento De Chave De API
+## Exercício 6: Vazamento De Chave De API
 
 No Simulador, use:
 
 - canal: `UPLOAD`
 - amostra: `config.env`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. Qual evidencia tecnica foi detectada?
+1. Qual evidência técnica foi detectada?
 2. Por que uma chave de API e considerada dado restrito?
 3. Qual foi a severidade?
-4. Que controles adicionais poderiam existir em producao?
+4. Que controles adicionais poderiam existir em produção?
 
 Resultado esperado:
 
-- acao `block`;
+- ação `block`;
 - severidade `critical`;
-- evidencia de credencial ou token.
+- evidência de credencial ou token.
 
-## Exercicio 7: Chat Interno Com Conteudo Publico
+## Exercício 7: Chat Interno Com Conteúdo Público
 
 No Simulador, use:
 
 - canal: `CHAT`
 - amostra: `Resumo de politica publica`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
 1. O canal chat foi bloqueado?
-2. O conteudo continha dado sensivel?
-3. Por que a classificacao publica reduz o risco?
+2. O conteúdo continha dado sensível?
+3. Por que a classificação publica reduz o risco?
 
 Resultado esperado:
 
-- acao `allow`;
+- ação `allow`;
 - baixo risco;
-- demonstracao de que o DLP avalia conteudo e contexto.
+- demonstração de que o DLP avalia conteúdo e contexto.
 
-## Exercicio 8: Dados De Cliente Em IA Publica
+## Exercício 8: Dados De Cliente Em IA Publica
 
 No Simulador, use:
 
 - canal: `CHAT`
 - amostra: `Prompt de atendimento`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. Quais evidencias aparecem no detalhe do evento?
-2. O dado sensivel foi exibido inteiro ou mascarado?
+1. Quais evidências aparecem no detalhe do evento?
+2. O dado sensível foi exibido inteiro ou mascarado?
 3. Por que enviar dados de cliente para IA publica e arriscado?
-4. A classificacao declarada pelo usuario foi suficiente para liberar o envio?
+4. A classificação declarada pelo usuário foi suficiente para liberar o envio?
 
 Resultado esperado:
 
-- acao `block`;
-- evidencia de email e CPF;
-- demonstracao de rotulo inconsistente e classificacao elevada pelo DLP.
+- ação `block`;
+- evidência de email e CPF;
+- demonstração de rótulo inconsistente e classificação elevada pelo DLP.
 
-## Exercicio 9: CPF Em Volume Em Chat/IA
+## Exercício 9: CPF Em Volume Em Chat/IA
 
 No Simulador, use:
 
 - canal: `CHAT`
 - amostra: `Analise de planilha com CPFs`
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
 1. Quantos CPFs foram detectados?
-2. O volume de evidencias mudou a severidade?
-3. Qual politica foi acionada?
+2. O volume de evidências mudou a severidade?
+3. Qual política foi acionada?
 4. Por que volume e importante em DLP?
 
 Resultado esperado:
 
-- acao `block`;
+- ação `block`;
 - severidade alta ou critica;
-- classificacao efetiva `restrito`.
+- classificação efetiva `restrito`.
 
-## Exercicio 10: Rotulo Inconsistente
+## Exercício 10: Rótulo Inconsistente
 
-Escolha uma amostra publica e edite o conteudo adicionando:
+Escolha uma amostra publica e edite o conteúdo adicionando:
 
 ```text
 CPF 123.456.789-09
 ```
 
-Mantenha a classificacao declarada como `Publico`.
+Mantenha a classificação declarada como `Publico`.
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. O que o usuario declarou?
+1. O que o usuário declarou?
 2. O que o DLP detectou?
-3. Qual foi a classificacao efetiva?
-4. Qual politica trata essa inconsistencia?
-5. Por que um DLP nao deve confiar apenas no rotulo declarado?
+3. Qual foi a classificação efetiva?
+4. Qual política trata essa inconsistencia?
+5. Por que um DLP nao deve confiar apenas no rótulo declarado?
 
 Resultado esperado:
 
-- politica de rotulo inconsistente;
-- classificacao efetiva maior que `Publico`;
+- política de rótulo inconsistente;
+- classificação efetiva maior que `Publico`;
 - alerta, quarentena ou bloqueio conforme destino, canal e severidade.
 
-## Exercicio 11: Mudanca De Destino
+## Exercício 11: Mudança De Destino
 
 Use a amostra `Planilha de salarios`.
 
@@ -268,46 +268,46 @@ Compare os dois eventos.
 
 Responda:
 
-1. A evidencia sensivel mudou?
-2. A classificacao mudou?
-3. A politica acionada mudou?
-4. A acao final mudou?
+1. A evidência sensível mudou?
+2. A classificação mudou?
+3. A política acionada mudou?
+4. A ação final mudou?
 5. O que isso mostra sobre contexto?
 
 Resultado esperado:
 
-- o conteudo continua sensivel;
-- o destino altera a decisao;
-- demonstracao de contexto na politica DLP.
+- o conteúdo continua sensível;
+- o destino altera a decisão;
+- demonstração de contexto na política DLP.
 
-## Exercicio 12: Remocao De Evidencia Sensivel
+## Exercício 12: Remocao De Evidência Sensível
 
 Use a amostra `base-clientes.csv`.
 
-Remova os CPFs do conteudo e substitua por texto generico:
+Remova os CPFs do conteúdo e substitua por texto generico:
 
 ```text
 Lista de clientes segmentada por regiao, sem identificadores pessoais.
 ```
 
-Execute a simulacao.
+Execute a simulação.
 
 Responda:
 
-1. A classificacao detectada mudou?
-2. A acao final mudou?
+1. A classificação detectada mudou?
+2. A ação final mudou?
 3. O score diminuiu?
-4. O que isso ensina sobre minimizacao de dados?
+4. O que isso ensina sobre minimização de dados?
 
 Resultado esperado:
 
-- menos evidencias sensiveis;
+- menos evidências sensíveis;
 - risco menor;
-- possivel mudanca de `block` para acao menos restritiva.
+- possível mudança de `block` para ação menos restritiva.
 
-## Consolidacao Individual
+## Consolidação Individual
 
-Use a tabela de eventos e os detalhes das simulacoes executadas para responder individualmente.
+Use a tabela de eventos e os detalhes das simulações executadas para responder individualmente.
 
 ### Parte 1: Identificar O Evento Mais Critico
 
@@ -319,12 +319,12 @@ Responda:
 
 1. Qual foi o canal usado?
 2. Qual foi o destino?
-3. Qual foi a classificacao efetiva?
-4. Qual foi a acao final?
-5. Quais evidencias contribuiram para esse risco?
-6. Qual politica foi acionada?
+3. Qual foi a classificação efetiva?
+4. Qual foi a ação final?
+5. Quais evidências contribuiram para esse risco?
+6. Qual política foi acionada?
 
-### Parte 2: Comparar Conteudo E Contexto
+### Parte 2: Comparar Conteúdo E Contexto
 
 Escolha dois eventos:
 
@@ -333,64 +333,64 @@ Escolha dois eventos:
 
 Responda:
 
-1. O que mudou no conteudo?
+1. O que mudou no conteúdo?
 2. O que mudou no destino?
-3. O canal influenciou a decisao?
-4. A classificacao declarada foi suficiente para explicar a decisao?
-5. A classificacao detectada mudou a interpretacao do evento?
+3. O canal influenciou a decisão?
+4. A classificação declarada foi suficiente para explicar a decisão?
+5. A classificação detectada mudou a interpretação do evento?
 
-### Parte 3: Classificacao Declarada, Detectada E Efetiva
+### Parte 3: Classificação Declarada, Detectada E Efetiva
 
-Escolha um evento em que a classificacao efetiva seja diferente da classificacao declarada.
-
-Responda:
-
-1. Qual classificacao o usuario declarou?
-2. O que o DLP detectou no conteudo?
-3. Qual classificacao efetiva foi aplicada?
-4. Por que a classificacao efetiva ficou mais restritiva?
-5. O que poderia acontecer se o DLP confiasse apenas na classificacao declarada?
-
-### Parte 4: Evidencias E Mascaramento
-
-Escolha um evento com evidencias sensiveis.
+Escolha um evento em que a classificação efetiva seja diferente da classificação declarada.
 
 Responda:
 
-1. Quais tipos de evidencia foram detectados?
-2. A evidencia aparece inteira ou mascarada?
-3. Por que mascarar evidencias e importante em uma tela de auditoria?
-4. O mascaramento remove o risco do dado original ou apenas reduz exposicao na visualizacao?
+1. Qual classificação o usuário declarou?
+2. O que o DLP detectou no conteúdo?
+3. Qual classificação efetiva foi aplicada?
+4. Por que a classificação efetiva ficou mais restritiva?
+5. O que poderia acontecer se o DLP confiasse apenas na classificação declarada?
 
-### Parte 5: Limitacoes Da Simulacao
+### Parte 4: Evidências E Mascaramento
+
+Escolha um evento com evidências sensíveis.
+
+Responda:
+
+1. Quais tipos de evidência foram detectados?
+2. A evidência aparece inteira ou mascarada?
+3. Por que mascarar evidências e importante em uma tela de auditoria?
+4. O mascaramento remove o risco do dado original ou apenas reduz exposicao na visualização?
+
+### Parte 5: Limitações Da Simulação
 
 Com base no que foi observado, responda:
 
-1. O laboratorio inspeciona canais reais de email, navegador ou endpoint?
-2. O laboratorio bloqueia trafego real ou apenas simula a decisao?
-3. As politicas sao editaveis pela UI?
-4. Existe integracao com diretorio corporativo, CASB, proxy, EDR ou SIEM?
-5. O que seria necessario para transformar esta simulacao em uma prova de conceito mais proxima de producao?
+1. O laboratório inspeciona canais reais de email, navegador ou endpoint?
+2. O laboratório bloqueia tráfego real ou apenas simula a decisão?
+3. As políticas sao editáveis pela UI?
+4. Existe integração com diretório corporativo, CASB, proxy, EDR ou SIEM?
+5. O que seria necessário para transformar esta simulação em uma prova de conceito mais próxima de produção?
 
 ### Parte 6: Sintese
 
 Preencha a tabela:
 
-| Situacao | Evidencia Principal | Contexto De Risco | Acao Do DLP | Motivo |
+| Situação | Evidência Principal | Contexto De Risco | Ação Do DLP | Motivo |
 | --- | --- | --- | --- | --- |
-| Conteudo publico enviado externamente |  |  |  |  |
-| Salarios enviados para email pessoal |  |  |  |  |
-| API key enviada para servico externo |  |  |  |  |
+| Conteúdo público enviado externamente |  |  |  |  |
+| Salários enviados para email pessoal |  |  |  |  |
+| API key enviada para serviço externo |  |  |  |  |
 | CPFs enviados para IA publica |  |  |  |  |
 | Contrato enviado para fornecedor aprovado |  |  |  |  |
 
 ## Gabarito Orientativo
 
-- O DLP combina conteudo, classificacao, canal, destino e politica.
-- Dados publicos podem ser permitidos quando nao ha evidencias sensiveis.
+- O DLP combina conteúdo, classificação, canal, destino e política.
+- Dados públicos podem ser permitidos quando nao ha evidências sensíveis.
 - Dados confidenciais podem gerar alerta ou quarentena quando o destino e aprovado.
 - Dados restritos, credenciais e CPF em volume tendem a gerar bloqueio.
-- Rotulos declarados ajudam, mas nao substituem inspecao de conteudo.
+- Rótulos declarados ajudam, mas nao substituem inspecao de conteúdo.
 - Destinos pessoais, drives pessoais e IA publica aumentam o risco.
-- Evidencias mascaradas permitem auditoria sem expor novamente o dado sensivel.
-- Este laboratorio simula decisoes; ele nao intercepta trafego real.
+- Evidências mascaradas permitem auditoria sem expor novamente o dado sensível.
+- Este laboratório simula decisões; ele nao intercepta tráfego real.
